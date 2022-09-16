@@ -1,0 +1,39 @@
+{
+  "name": "penguin",
+  "version": "2.0.0",
+  "description": "A Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "engines": {
+    "node": "16.13.0"
+  },
+  "keywords": [],
+  "author": "meesam4687",
+  "license": "ISC",
+  "devDependencies": {
+    "node": "^16.13.0"
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.8.0",
+    "@discordjs/voice": "^0.8.0",
+    "@distube/spotify": "^1.2.1",
+    "convert-seconds": "^1.0.1",
+    "discord-image-generation": "^1.4.12",
+    "discord-together": "^1.3.3",
+    "discord.js": "^13.6.0",
+    "distube": "^3.3.2",
+    "dotenv": "^16.0.0",
+    "ffmpeg-static": "^4.4.1",
+    "libsodium-wrappers": "^0.7.9",
+    "oakdex-pokedex": "^0.4.5",
+    "opusscript": "0.0.8",
+    "quick.db": "^7.1.3",
+    "quickmongo": "^3.0.0",
+    "random-reddit": "^2.0.3",
+    "string-progressbar": "^1.0.4",
+    "node-fetch-commonjs": "^3.1.1",
+    "@distube/ytdl-core": "^4.11.4"
+  }
+}
