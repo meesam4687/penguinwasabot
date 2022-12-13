@@ -1,15 +1,16 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
+
 module.exports = {
-    name: "remove",
-    run: async (client, message, args) => {
-        const queue = client.distube.getQueue(message)
-        if (!queue) return message.channel.send(`Nothing is Being Played`)
-        if(!args[0]){
-            let remov = queue.songs.pop()
-            message.channel.send(`Removed \`${remov.name}\` from the queue.`)
-            return;
-        }
-        let removed = queue.songs.splice(args[0], args[0]);
-        message.channel.send(`Removed \`${removed.name}\` from the queue`)
-    }
-}
+    data: new Discord.SlashCommandBuilder()
+        .setName('remove')
+        .setDescription('Remove a song from the queue')
+        .addIntegerOption(option => option.setName('int').setDescription('Number in queue').setRequired(true)),
+    async execute(interaction) {
+        let opt = interaction.options.getInteger('int');
+        const queue = interaction.client.distube.getQueue(interaction)
+        if (!queue) return interaction.reply({ content: `Nothing is Being Played`, ephemeral: true }).catch(console.error)
+        if (queue.length < opt) return interaction.reply("Was quite funny that you tried to do that");
+        let removed = queue.songs.splice(opt, opt);
+        interaction.reply(`Removed from the queue`).catch(console.error)
+    },
+};

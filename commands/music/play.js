@@ -1,18 +1,21 @@
+const Discord = require('discord.js');
+
 module.exports = {
-  name: "play",
-  aliases: ["p"],
-  run: async (client, message, args) => {
-    const string = args.join(" ")
-    if (!string) return message.channel.send(`Please enter a song url or query to play.`)
-    try {
-      let voicechannel = message.member.voice.channel
-      if(!voicechannel){
-        message.channel.send(`Join a Voice Channel First.`)
-        return;
-      }
-      client.distube.play(message, string)
-    } catch (e) {
-      message.channel.send(`An Error Occured \n||${e}||`)
-    }
-  }
-}
+    data: new Discord.SlashCommandBuilder()
+        .setName('play')
+        .setDescription('Play a song')
+        .addStringOption(option =>
+            option.setName('songname')
+                .setDescription('Name of the song you want to play')
+                .setRequired(true)),
+    async execute(interaction) {
+        const songName = interaction.options.getString('songname')
+        if (!interaction.member.voice.channel) return interaction.reply({ content: 'Join a VC', ephemeral: true });
+        interaction.client.distube.play(interaction.member.voice.channel, songName, {
+            member: interaction.member,
+            textChannel: interaction.channel,
+            interaction
+        })
+        interaction.reply({ content: "Added" })
+    },
+};

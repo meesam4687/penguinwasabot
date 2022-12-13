@@ -1,74 +1,98 @@
-const Discord = require("discord.js");
-const client = new Discord.Client({ intents: ['GUILDS'] allowedMentions: { parse: ['users'], repliedUser: true }});
-const fs = require("fs");
-const DisTube = require("distube");
-const { SpotifyPlugin } = require("@distube/spotify");
-client.distube = new DisTube.DisTube(client, { searchSongs: 0, emitNewSongOnly: true, leaveOnFinish: true, plugins: [new SpotifyPlugin()], youtubeCookie: process.env.YOUTUBE_COOKIE });
+const Discord = require('discord.js');
+const { DisTube } = require('distube')
+const { SpotifyPlugin } = require('@distube/spotify')
+const { SoundCloudPlugin } = require('@distube/soundcloud')
+const { YtDlpPlugin } = require('@distube/yt-dlp')
+const path = require('node:path');
+const fs = require('node:fs');
+const { REST } = require("@discordjs/rest")
+require('dotenv').config();
+const client = new Discord.Client({
+  intents: [
+    Discord.GatewayIntentBits.Guilds,
+    Discord.GatewayIntentBits.GuildVoiceStates,
+    Discord.GatewayIntentBits.GuildMessages, // |> Privilleged Intent Required for Snipe.
+    Discord.GatewayIntentBits.MessageContent // |> Delete /events/messageDelete.js and /commands/fun/snipe.js if you want to remove these
+  ]
+});
+client.distube = new DisTube(client, {
+  leaveOnStop: true,
+  emitNewSongOnly: true,
+  emitAddSongWhenCreatingQueue: false,
+  emitAddListWhenCreatingQueue: true,
+  plugins: [
+    new SpotifyPlugin({
+      emitEventsAfterFetching: true
+    }),
+    new SoundCloudPlugin(),
+    new YtDlpPlugin()
+  ]
+})
 client.commands = new Discord.Collection();
-client.aliases = new Discord.Collection();
-client.config = require("./config.json");
-require("dotenv").config();
-const { Database } = require("quickmongo");
-client.db = new Database(process.env.DB);
-client.db.on("ready", () => {
-    console.log("Database connected!");
-});
+const cmds = []
 
-fs.readdir('./commands/general/', (err, files) => {
-  if (err) return console.log('Could not find any general commands!')
-  const jsFiles = files.filter(f => f.split('.').pop() === 'js')
-  console.log("------Loading general commands.------")
-  if (jsFiles.length <= 0) return console.log('Could not find any general commands!')
-  jsFiles.forEach(file => {
-    const cmd = require(`./commands/general/${file}`)
-    console.log(`Loaded ${file}`)
-    client.commands.set(cmd.name, cmd)
-    if (cmd.aliases) cmd.aliases.forEach(alias => client.aliases.set(alias, cmd.name))
-  })
-});
-
-fs.readdir('./commands/music/', (err, files) => {
-  if (err) return console.log('Could not find any music commands!')
-  const jsFiles = files.filter(f => f.split('.').pop() === 'js')
-  console.log("------Loading music commands.------")
-  if (jsFiles.length <= 0) return console.log('Could not find any music commands!')
-  jsFiles.forEach(file => {
-    const cmd = require(`./commands/music/${file}`)
-    console.log(`Loaded ${file}`)
-    client.commands.set(cmd.name, cmd)
-    if (cmd.aliases) cmd.aliases.forEach(alias => client.aliases.set(alias, cmd.name))
-  })
-});
-
-fs.readdir('./commands/fun/', (err, files) => {
-  if (err) return console.log('Could not find any fun commands!')
-  const jsFiles = files.filter(f => f.split('.').pop() === 'js')
-  console.log("------Loading fun commands.------")
-  if (jsFiles.length <= 0) return console.log('Could not find any fun commands!')
-  jsFiles.forEach(file => {
-    const cmd = require(`./commands/fun/${file}`)
-    console.log(`Loaded ${file}`)
-    client.commands.set(cmd.name, cmd)
-    if (cmd.aliases) cmd.aliases.forEach(alias => client.aliases.set(alias, cmd.name))
-  })
-});
-
-const events = fs.readdirSync('./events/discordjs').filter(file => file.endsWith('.js'));
-
-for (const file of events) {
-	const events = require(`./events/discordjs/${file}`);
-	if (events.once) {
-		client.once(events.name, (...args) => events.execute(...args));
-	} else {
-		client.on(events.name, (...args) => events.execute(...args));
-	}
+const musicCommandsPath = path.join(__dirname, 'commands/music');
+const musicCommandFiles = fs.readdirSync(musicCommandsPath).filter(file => file.endsWith('.js'));
+for (const file of musicCommandFiles) {
+  const filePath = path.join(musicCommandsPath, file);
+  const command = require(filePath);
+  client.commands.set(command.data.name, command);
+  cmds.push(command.data)
 }
 
-const distubeEvents = fs.readdirSync('./events/distube').filter(file => file.endsWith('.js'));
-
-for (const file of distubeEvents) {
-  const distubeEvents = require(`./events/distube/${file}`);
-  client.distube.on(distubeEvents.name, (...args) => distubeEvents.execute(...args));
+const generalCommandsPath = path.join(__dirname, 'commands/general');
+const generalCommandFiles = fs.readdirSync(generalCommandsPath).filter(file => file.endsWith('.js'));
+for (const file of generalCommandFiles) {
+  const filePath = path.join(generalCommandsPath, file);
+  const command = require(filePath);
+  client.commands.set(command.data.name, command);
+  cmds.push(command.data)
 }
 
-client.login(process.env.CLIENT_TOKEN)
+const funCommandsPath = path.join(__dirname, 'commands/fun');
+const funCommandFiles = fs.readdirSync(funCommandsPath).filter(file => file.endsWith('.js'));
+for (const file of funCommandFiles) {
+  const filePath = path.join(funCommandsPath, file);
+  const command = require(filePath);
+  client.commands.set(command.data.name, command);
+  cmds.push(command.data)
+}
+
+const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+rest.put(Discord.Routes.applicationCommands(process.env.CLIENT_ID), { body: cmds })
+  .then((data) => console.log(`Successfully registered ${data.length} commands.`))
+  .catch(console.error);
+
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+  const filePath = path.join(eventsPath, file);
+  const event = require(filePath);
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args) => event.execute(...args));
+  }
+}
+
+const distubeEventsPath = path.join(__dirname, 'events/distube');
+const distubeEventFiles = fs.readdirSync(distubeEventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of distubeEventFiles) {
+  const distubeFilePath = path.join(distubeEventsPath, file);
+  const devent = require(distubeFilePath);
+  if (devent.once) {
+    client.distube.once(devent.name, (...args) => devent.execute(...args));
+  } else {
+    client.distube.on(devent.name, (...args) => devent.execute(...args));
+  }
+}
+
+client.login(process.env.TOKEN)
+
+const express = require("express")()
+express.all('/', function(req, res) {
+  res.send("Server Running")
+})
+express.listen(process.env.PORT, console.log("Server Started"))

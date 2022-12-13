@@ -1,15 +1,21 @@
-const DIG = require("discord-image-generation");
+const imgGen = require("discord-image-generation");
 const Discord = require('discord.js');
+
 module.exports = {
-  name: "wanted",
-  run : async (client, message, args) => {
-    if(!message.mentions.users.first()){
-      var av = message.author.displayAvatarURL({ dynamic: false, format: 'png' });
-    } else {
-      var av = message.mentions.users.first().displayAvatarURL({dynamic: false, format: 'png'})
-    }
-    let img = await new DIG.Wanted().getImage(av, `$`);
-    let attach = new Discord.MessageAttachment(img, "wanted.png");
-    message.channel.send({files: [attach]})
-  }
-}
+    data: new Discord.SlashCommandBuilder()
+        .setName('wanted')
+        .setDescription('Make someone a criminal')
+        .addUserOption((o) =>
+            o
+                .setName("user")
+                .setDescription("The Target")
+                .setRequired(true)
+        ),
+    async execute(interaction) {
+        let tgt = interaction.options.getUser('user')
+        var av = tgt.displayAvatarURL({ dynamic: false, format: 'png' })
+        let img = await new imgGen.Wanted().getImage(av, '$');
+        let attach = new Discord.MessageAttachment(img, "hitler.png");
+        interaction.reply({ files: [attach] })
+    },
+};

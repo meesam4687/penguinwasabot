@@ -1,53 +1,52 @@
 const Discord = require("discord.js")
-const Voice = require('@discordjs/voice');
-const fs = require('fs')
+
 module.exports = {
   name: "interactionCreate",
   async execute(interaction){
     const queue = interaction.client.distube.getQueue(interaction)
      var voiceChannel = interaction.member.voice.channel;
+     if (interaction.isChatInputCommand()) return;
      if(!voiceChannel){
        interaction.reply({content: "You need to be in a voice channel.", ephemeral: true})
        return
       }
     if(!queue) return interaction.reply({content: "Nothing playing lol.", ephemeral: true})
     const song = queue.songs[0]
-    const playEmbed = new Discord.MessageEmbed()
-	    .setColor('RANDOM')
+    const playEmbed = new Discord.EmbedBuilder()
 	    .setTitle(`Now Playing ${song.name} 🎶`)
       .setDescription(`⌚ Song Duration: \`${song.formattedDuration}\``)
 	    .setImage(song.thumbnail)
 	    .setTimestamp()
       .setFooter({text: `Requested by: ${song.user.username}`})
-    const mesgRow = new Discord.MessageActionRow()
+    const mesgRow = new Discord.ActionRowBuilder()
     .addComponents(
-     new Discord.MessageButton()
+     new Discord.ButtonBuilder()
       .setCustomId("stopbtn")
       .setLabel("⏹️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary),
+     new Discord.ButtonBuilder()
       .setCustomId("pausebtn")
       .setLabel("⏸️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary),
+     new Discord.ButtonBuilder()
       .setCustomId("skpbtn")
       .setLabel("⏩")
-      .setStyle("PRIMARY")
+      .setStyle(Discord.ButtonStyle.Primary)
     );
-    const mesgRowR = new Discord.MessageActionRow()
+    const mesgRowR = new Discord.ActionRowBuilder()
     .addComponents(
-     new Discord.MessageButton()
+     new Discord.ButtonBuilder()
       .setCustomId("stopbtn")
       .setLabel("⏹️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary),
+     new Discord.ButtonBuilder()
       .setCustomId("pausebtn")
       .setLabel("▶️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
+      .setStyle(Discord.ButtonStyle.Primary),
+     new Discord.ButtonBuilder()
       .setCustomId("skpbtn")
       .setLabel("⏩")
-      .setStyle("PRIMARY")
+      .setStyle(Discord.ButtonStyle.Primary)
     );
     if(interaction.customId === "pausebtn"){
       if(!queue) return interaction.reply({content: "Nothing playing lol.", ephemeral: true})

@@ -1,15 +1,21 @@
-const DIG = require("discord-image-generation");
+const imgGen = require("discord-image-generation");
 const Discord = require('discord.js');
+
 module.exports = {
-  name: "trash",
-  run: async (client, message, args) => {
-    if(!message.mentions.users.first()){
-      var av = message.author.displayAvatarURL({ dynamic: false, format: 'png' });
-    } else {
-      var av = message.mentions.users.first().displayAvatarURL({dynamic: false, format: 'png'})
-    }
-    let img = await new DIG.Trash().getImage(av);
-    let attach = new Discord.MessageAttachment(img, "trash.png");
-    message.channel.send({files: [attach]})
-  }
-}
+    data: new Discord.SlashCommandBuilder()
+        .setName('trash')
+        .setDescription('Someones avatar is trash')
+        .addUserOption((o) =>
+            o
+                .setName("user")
+                .setDescription("The Target")
+                .setRequired(true)
+        ),
+    async execute(interaction) {
+        let tgt = interaction.options.getUser('user')
+        var av = tgt.displayAvatarURL({ dynamic: false, format: 'png' })
+        let img = await new imgGen.Trash().getImage(av);
+        let attach = new Discord.MessageAttachment(img, "inverted.png");
+        interaction.reply({ files: [attach] })
+    },
+};

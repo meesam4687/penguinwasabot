@@ -1,8 +1,10 @@
+const Discord = require('discord.js');
+
 module.exports = {
-    name: "ping",
-    run: async (client, message, args) => {
-        message.channel.send("Pinging...").then(m => {
-            m.edit(`Pong! Bot ping is ${client.ws.ping}ms`);
-        });
-    }
-}
+	data: new Discord.SlashCommandBuilder()
+		.setName('ping')
+		.setDescription('Check the bot ping.'),
+	async execute(interaction) {
+		await interaction.reply(`Pong! The bot ping is ${interaction.client.ws.ping}ms`);
+	},
+};

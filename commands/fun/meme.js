@@ -1,17 +1,28 @@
 const Discord = require('discord.js');
 const { getPost, getImage } = require('random-reddit');
-module.exports = {
-  name: "meme",
-  run: async (client, message, args) => {
-    if(message.channel.id !== '854715779017343007' && message.guild.id === '765125984323633161') return message.reply('No *memes* in general 🗿.\nGo to <#854715779017343007>')
-    const post = await getPost('memes')
-    let title = post.title
-    let img = post.url
-    let memeEmbed = new Discord.MessageEmbed()
-      .setTitle(title)
-      .setImage(img)
-      .setFooter({ text: 'The  M e m e' })
-      .setColor('RANDOM')
-    message.channel.send({ embeds: [memeEmbed] })
-  }
+
+function randomArray(arr) {
+  return arr[Math.floor(Math.random() * arr.length)]
 }
+
+module.exports = {
+  data: new Discord.SlashCommandBuilder()
+    .setName('meme')
+    .setDescription('Get a random meme'),
+  async execute(interaction) {
+    let subs = [
+      'memes',
+      'meme',
+      'holup',
+      'shitposting',
+      'dankmemes'
+    ]
+    let memeObj = await getPost(randomArray(subs));
+    let memesEmbed = new Discord.EmbedBuilder()
+      .setTitle(memeObj.title)
+      .setImage(memeObj.url)
+      .setTimestamp()
+      .setAuthor({ name: 'Requested by ' + interaction.user.username.toString(), iconURL: interaction.user.displayAvatarURL() })
+    await interaction.reply({ embeds: [memesEmbed] })
+  },
+};

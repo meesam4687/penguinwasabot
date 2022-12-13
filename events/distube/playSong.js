@@ -1,46 +1,45 @@
-const Discord = require("discord.js")
-const wait = require("util").promisify(setTimeout)
+const Discord = require('discord.js')
 module.exports = {
-  name: "playSong",
-  async execute(queue, song){
-    queue.client.distube.startduration = new Date()
-    const playEmbed = new Discord.MessageEmbed()
-	    .setColor('RANDOM')
-	    .setTitle(`Now Playing ${song.name} 🎶`)
-      .setDescription(`⌚ Song Duration: \`${song.formattedDuration}\``)
-	    .setImage(song.thumbnail)
-	    .setTimestamp()
-      .setFooter({text: `Requested by: ${song.user.username}`})
-    const mesgRow = new Discord.MessageActionRow()
-    .addComponents(
-     new Discord.MessageButton()
-      .setCustomId("stopbtn")
-      .setLabel("⏹️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
-      .setCustomId("pausebtn")
-      .setLabel("⏸️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
-      .setCustomId("skpbtn")
-      .setLabel("⏩")
-      .setStyle("PRIMARY")
-    );
-    const mesgRowR = new Discord.MessageActionRow()
-    .addComponents(
-     new Discord.MessageButton()
-      .setCustomId("stopbtn")
-      .setLabel("⏹️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
-      .setCustomId("pausebtn")
-      .setLabel("▶️")
-      .setStyle("PRIMARY"),
-     new Discord.MessageButton()
-      .setCustomId("skpbtn")
-      .setLabel("⏩")
-      .setStyle("PRIMARY")
-    );
-    queue.textChannel.send({ embeds: [playEmbed], components: [mesgRow] })
-  },
-}
+    name: 'playSong',
+    once: false,
+    execute(queue, song) {
+        queue.client.distube.startduration = new Date()
+        const playEmbed = new Discord.EmbedBuilder()
+            .setTitle(`Now Playing ${song.name} 🎶`)
+            .setDescription(`⌚ Song Duration: \`${song.formattedDuration}\``)
+            .setImage(song.thumbnail)
+            .setTimestamp()
+            .setFooter({ text: `Requested by: ${song.user.username}` })
+        const mesgRow = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId("stopbtn")
+                    .setLabel("⏹️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("pausebtn")
+                    .setLabel("⏸️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("skpbtn")
+                    .setLabel("⏩")
+                    .setStyle(Discord.ButtonStyle.Primary)
+            );
+        const mesgRowR = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId("stopbtn")
+                    .setLabel("⏹️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("pausebtn")
+                    .setLabel("▶️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("skpbtn")
+                    .setLabel("⏩")
+                    .setStyle(Discord.ButtonStyle.Primary)
+            );
+        queue.textChannel.send({ embeds: [playEmbed], components: [mesgRow] })
+    },
+};

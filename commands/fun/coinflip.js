@@ -1,17 +1,18 @@
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-const coinflip = ['Heads', 'Tails', 'MIDDLE :OOOOOOOOO']
-function flip(){
-return coinflip[Math.floor(Math.random() * coinflip.length)];
-}
+const Discord = require('discord.js');
+
 module.exports = {
-  name: "coinflip",
-  aliases: ["flip", "cflip"],
-  run: async (client, message, args) => {
-    let gif = "https://cdn.dribbble.com/users/722835/screenshots/2360005/coin_dr.gif"
-    let msg = await message.channel.send(gif)
-    await wait(2000)
-    msg.edit(flip())
-  }
-}
+    data: new Discord.SlashCommandBuilder()
+        .setName('coinflip')
+        .setDescription('Can\'t decide on something? Flip a coin!'),
+    async execute(interaction) {
+        const cflip = ['Heads', 'Tails']
+        function flip() {
+            let int = Math.floor(Math.random() * cflip.length)
+            if (Math.random() === 0.8484170789233052) {
+                return "MIDDLE! Holy Shit"
+            }
+            return coinflip[int];
+        }
+        interaction.reply(flip())
+    },
+};
