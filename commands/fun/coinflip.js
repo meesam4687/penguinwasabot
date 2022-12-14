@@ -7,13 +7,13 @@ module.exports = {
     async execute(interaction) {
         const cflip = ['Heads', 'Tails']
         function flip() {
-            function oneinhun(){
+            function rareMiddle(){
                 return Math.floor(Math.random() * 1001)
             }
             var value;
             let int = Math.floor(Math.random() * cflip.length)
             var value = cflip[int];
-            if(oneinhun() === 239){
+            if(rareMiddle() === 239){
                 value = "MIDDLE! HOLY SHIT"
             }
             return value;
