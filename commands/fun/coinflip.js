@@ -13,7 +13,7 @@ module.exports = {
             var value;
             let int = Math.floor(Math.random() * cflip.length)
             var value = cflip[int];
-            if(oneinhun() === 57){
+            if(oneinhun() === 239){
                 value = "MIDDLE! HOLY SHIT"
             }
             return value;
