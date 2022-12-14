@@ -7,11 +7,16 @@ module.exports = {
     async execute(interaction) {
         const cflip = ['Heads', 'Tails']
         function flip() {
-            let int = Math.floor(Math.random() * cflip.length)
-            if (Math.random() === 0.8484170789233052) {
-                return "MIDDLE! Holy Shit"
+            function oneinhun(){
+                return Math.floor(Math.random() * 1001)
             }
-            return coinflip[int];
+            var value;
+            let int = Math.floor(Math.random() * cflip.length)
+            var value = cflip[int];
+            if(oneinhun() === 57){
+                value = "MIDDLE! HOLY SHIT"
+            }
+            return value;
         }
         interaction.reply(flip())
     },
