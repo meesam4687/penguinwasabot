@@ -9,7 +9,6 @@ module.exports = {
             await command.execute(interaction);
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: 'An error occured', ephemeral: true });
         }
 	},
 };
