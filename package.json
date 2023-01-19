@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Penguin",
   "main": "index.js",
+  "engines": {
+    "node": "16.13.0"
+  },
   "dependencies": {
     "@discordjs/opus": "^0.8.0",
     "@discordjs/rest": "^1.1.0",
