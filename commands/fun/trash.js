@@ -15,7 +15,7 @@ module.exports = {
         let tgt = interaction.options.getUser('user')
         var av = tgt.displayAvatarURL({ dynamic: false, format: 'png' })
         let img = await new imgGen.Trash().getImage(av);
-        let attach = new Discord.MessageAttachment(img, "inverted.png");
+        let attach = new Discord.AttachmentBuilder(img, "inverted.png");
         interaction.reply({ files: [attach] })
     },
 };
