@@ -15,7 +15,7 @@ module.exports = {
         let tgt = interaction.options.getUser('user')
         var av = tgt.displayAvatarURL({ dynamic: false, format: 'png' })
         let img = await new imgGen.Batslap().getImage(av, interaction.user.displayAvatarURL({ dynamic: false, format: 'png' }));
-        let attach = new Discord.MessageAttachment(img, "batslap.png");
+        let attach = new Discord.AttachmentBuilder(img, "batslap.png");
         interaction.reply({ files: [attach] })
     },
 };
