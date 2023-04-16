@@ -10,7 +10,7 @@ module.exports = {
                 .setDescription('Name of the pokemon')
                 .setRequired(true)),
     async execute(interaction) {
-        let pokeInput = interaction.options.getString('pokemonName')
+        let pokeInput = interaction.options.getString('pokemonname')
         const pokem = oakdexPokedex.findPokemon(pokeInput.toLowerCase().charAt(0).toUpperCase() + pokeInput.toLowerCase().slice(1))
         if (pokem === null) {
             interaction.reply({ content: "Pokemon not Found", ephemeral: true })
