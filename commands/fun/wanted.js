@@ -12,10 +12,11 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction) {
+      await interaction.deferReply()
         let tgt = interaction.options.getUser('user')
-        var av = tgt.displayAvatarURL({ dynamic: false, format: 'png' })
+        var av = tgt.displayAvatarURL({ dynamic: false, extension: 'png' })
         let img = await new imgGen.Wanted().getImage(av, '$');
         let attach = new Discord.AttachmentBuilder(img, "hitler.png");
-        interaction.reply({ files: [attach] })
+        await interaction.editReply({ files: [attach] })
     },
 };
