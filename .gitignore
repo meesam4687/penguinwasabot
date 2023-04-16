@@ -5,3 +5,5 @@ package-lock.json
 .env
 # Others
 json.sqlite
+.replit
+replit.nix
