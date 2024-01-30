@@ -1,7 +1,13 @@
 # Penguin
 Penguin the Discord Bot<br>
-It can do random stuff.
-# How to self-host
+<h3>Things it can do</h3>
+<ul>
+  <li>Play Music</li>
+  <li>Generate Memes (few)</li>
+  <li>Get a Ranom Meme from Reddit</li>
+  and more...
+</ul>
+# How to host
 **Make sure [NodeJS](https://nodejs.org/en/download/) is installed on your computer**<br>
 First run this command
 ```sh
