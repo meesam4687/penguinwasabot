@@ -16,12 +16,8 @@ module.exports = {
             interaction.reply({ content: "Pokemon not Found", ephemeral: true })
             return;
         }
-        if (pokem.evolutions[0] === undefined) {
-            var evo = 'None'
-        }
-        if (pokem.evolutions[0] !== undefined) {
-            var evo = pokem.evolutions[0].to
-        }
+        var evo;
+        pokem.evolutions[0] ? evo = pokem.evolutions[0].to : evo = 'None'
         const pokemon = pokeInput.toLowerCase()
         const pokeEmbed = new Discord.EmbedBuilder()
             .setTitle(`${pokem.names.en}`)
