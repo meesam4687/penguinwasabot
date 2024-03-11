@@ -4,7 +4,7 @@
   "description": "Penguin",
   "main": "index.js",
   "engines": {
-    "node": "16.13.0"
+    "node": "18.17.1"
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
