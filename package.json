@@ -16,7 +16,7 @@
     "@distube/ytdl-core": "^4.13.3",
     "convert-seconds": "^1.0.1",
     "data-uri-to-buffer": "^4.0.1",
-    "discord-image-generation": "^1.4.25",
+    "meesam4687-discord-image-generation": "^1.4.13",
     "discord.js": "^14.9.0",
     "distube": "^4.1.1",
     "dotenv": "^16.0.3",
