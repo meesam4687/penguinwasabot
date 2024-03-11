@@ -35,7 +35,7 @@ for (const file of musicCommandFiles) {
   const filePath = path.join(musicCommandsPath, file);
   const command = require(filePath);
   client.commands.set(command.data.name, command);
-  cmds.push(command.data.toJSON())
+  cmds.push(command.data)
 }
 
 const generalCommandsPath = path.join(__dirname, 'commands/general');
@@ -44,7 +44,7 @@ for (const file of generalCommandFiles) {
   const filePath = path.join(generalCommandsPath, file);
   const command = require(filePath);
   client.commands.set(command.data.name, command);
-  cmds.push(command.data.toJSON())
+  cmds.push(command.data)
 }
 
 const funCommandsPath = path.join(__dirname, 'commands/fun');
@@ -53,7 +53,7 @@ for (const file of funCommandFiles) {
   const filePath = path.join(funCommandsPath, file);
   const command = require(filePath);
   client.commands.set(command.data.name, command);
-  cmds.push(command.data.toJSON())
+  cmds.push(command.data)
 }
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
