@@ -56,7 +56,7 @@ for (const file of funCommandFiles) {
   cmds.push(command.data)
 }
 
-const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+const rest = new REST().setToken(process.env.TOKEN);
 rest.put(Discord.Routes.applicationCommands(process.env.CLIENT_ID), { body: cmds })
   .then((data) => console.log(`Successfully registered ${data.length} commands.`))
   .catch(console.error);
