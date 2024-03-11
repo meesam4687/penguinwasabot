@@ -24,7 +24,8 @@ client.distube = new DisTube(client, {
     new SpotifyPlugin(),
     new SoundCloudPlugin(),
     new YtDlpPlugin()
-  ]
+  ],
+  youtubeCookie: process.env.YT_COOKIE
 })
 client.commands = new Discord.Collection();
 const cmds = []
