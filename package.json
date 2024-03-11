@@ -34,7 +34,8 @@
     "random-reddit": "^2.0.3",
     "string-progressbar": "^1.0.4",
     "web-streams-polyfill": "^4.0.0",
-    "better-sqlite3": "^9.4.3"
+    "better-sqlite3": "^9.4.3",
+    "canvas": "^2.11.2"
   },
   "scripts": {
     "start": "node ."
