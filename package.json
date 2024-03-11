@@ -4,14 +4,14 @@
   "description": "Penguin",
   "main": "index.js",
   "engines": {
-    "node": "18.17.1"
+    "node": "17.9.1"
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
     "@discordjs/rest": "^1.7.0",
     "@discordjs/voice": "^0.16.0",
     "@distube/soundcloud": "^1.3.3",
-    "@distube/spotify": "^1.5.2",
+    "@distube/spotify": "^1.5.1",
     "@distube/yt-dlp": "^1.1.3",
     "@distube/ytdl-core": "^4.13.3",
     "convert-seconds": "^1.0.1",
