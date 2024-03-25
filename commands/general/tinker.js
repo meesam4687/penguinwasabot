@@ -14,7 +14,6 @@ module.exports = {
             return;
         }
         let input = interaction.options.getString('inp')
-        await eval(input);
-        interaction.reply("Executed");
+        await interaction.reply(`Executed\n${eval(input)}`);
     },
 };
