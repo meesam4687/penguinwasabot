@@ -18,7 +18,7 @@ module.exports = {
 			var mesg = `${msg.substr(0, 200)}.......`;
 		}
 		let embed = new Discord.EmbedBuilder()
-			.setTitle(db.get(`snipesender_${interaction.channel.id}`))
+			.setTitle(senderid)
 			.setDescription(mesg.replace(/(https?:\/\/)?(www\.)?((discordapp\.com\/invite)|(discord\.gg))\/(\w+)|https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g, "*link*"))
 			.setFooter({ text: 'Sniped, lol' })
 		interaction.reply({ embeds: [embed] })
