@@ -1,13 +1,15 @@
 const Discord = require('discord.js');
-const db = require('quick.db')
+const { QuickDB } = require('quick.db');
+
+const db = new QuickDB();
 module.exports = {
 	data: new Discord.SlashCommandBuilder()
 		.setName('snipe')
 		.setDescription('Fetch the most recently deleted message in this channel'),
 	async execute(interaction) {
-		let msg = db.get(`snipemsg_${interaction.channel.id}`)
-		let senderid = db.get(`snipesender_${interaction.channel.id}`)
-		let pfp = db.get(`snipepfp_${interaction.channel.id}`)
+		let msg = await db.get(`snipemsg_${interaction.channel.id}`)
+		let senderid = await db.get(`snipesender_${interaction.channel.id}`)
+		let pfp = await db.get(`snipepfp_${interaction.channel.id}`)
 		var mesg = msg
 		if (!msg) {
 			return interaction.reply({ content: `Well I Did Not Find Any Deleted Message In This Channel, Lol`, ephemeral: true })
