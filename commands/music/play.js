@@ -9,9 +9,10 @@ module.exports = {
                 .setDescription('Name of the song you want to play')
                 .setRequired(true)),
     async execute(interaction) {
-        const songName = interaction.options.getString('songname')
+        const query = interaction.options.getString('songname')
+        let searchResult = await interaction.client.ytPlugin.search(query)
         if (!interaction.member.voice.channel) return interaction.reply({ content: 'Join a VC', ephemeral: true });
-        interaction.client.distube.play(interaction.member.voice.channel, songName, {
+        interaction.client.distube.play(interaction.member.voice.channel, searchResult[0], {
             member: interaction.member,
             textChannel: interaction.channel,
             interaction

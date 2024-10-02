@@ -3,6 +3,7 @@ const { DisTube } = require('distube')
 const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
 const { YtDlpPlugin } = require('@distube/yt-dlp')
+const { YouTubePlugin } = require('@distube/youtube')
 const path = require('node:path');
 const fs = require('node:fs');
 const { REST } = require("@discordjs/rest")
@@ -15,17 +16,16 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.MessageContent // |> Delete /events/messageDelete.js and /commands/fun/snipe.js if you want to remove these
   ]
 });
+client.ytPlugin = new YouTubePlugin({cookies: JSON.parse(process.env.YT_COOKIES)})
 client.distube = new DisTube(client, {
-  leaveOnStop: true,
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
   emitAddListWhenCreatingQueue: true,
   plugins: [
     new SpotifyPlugin(),
     new SoundCloudPlugin(),
-    new YtDlpPlugin()
+    client.ytPlugin
   ],
-  youtubeCookie: process.env.YT_COOKIE
 })
 client.commands = new Discord.Collection();
 const cmds = []
