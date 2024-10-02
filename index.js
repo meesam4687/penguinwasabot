@@ -2,7 +2,6 @@ const Discord = require('discord.js');
 const { DisTube } = require('distube')
 const { SpotifyPlugin } = require('@distube/spotify')
 const { SoundCloudPlugin } = require('@distube/soundcloud')
-const { YtDlpPlugin } = require('@distube/yt-dlp')
 const { YouTubePlugin } = require('@distube/youtube')
 const path = require('node:path');
 const fs = require('node:fs');
