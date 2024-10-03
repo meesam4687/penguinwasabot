@@ -61,5 +61,16 @@ module.exports = {
             interaction.editReply({ embeds: [playEmbed], components: [mesgRow] });
             interaction.client.usedPlayCommand = false
         });
+        interaction.client.distube.on('addSong', async (queue, song) => {
+            if(!interaction.client.usedPlayCommand) return;
+            const addEmbed = new Discord.EmbedBuilder()
+                .setTitle(`Added ${song.name} to the queue 🎶`)
+                .setDescription(`⌚ Song Duration: \`${song.formattedDuration}\``)
+                .setImage(song.thumbnail)
+                .setTimestamp()
+                .setFooter({ text: `Requested by: ${song.user.username}` })
+            interaction.editReply({ embeds: [addEmbed] });
+            interaction.client.usedPlayCommand = false
+        });
     },
 };
