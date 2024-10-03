@@ -9,6 +9,7 @@ module.exports = {
                 .setDescription('Name of the song you want to play')
                 .setRequired(true)),
     async execute(interaction) {
+        await interaction.deferReply()
         interaction.client.usedPlayCommand = true
         const query = interaction.options.getString('songname')
         let searchResult = await interaction.client.ytPlugin.search(query)
@@ -18,8 +19,8 @@ module.exports = {
             textChannel: interaction.channel,
             interaction
         })
-        await interaction.deferReply()
         interaction.client.distube.on('playSong', async (queue, song) => {
+            song.interaction = interaction
             if(!interaction.client.usedPlayCommand) return;
             queue.client.distube.startduration = new Date()
             const playEmbed = new Discord.EmbedBuilder()
@@ -58,10 +59,11 @@ module.exports = {
                         .setLabel("⏩")
                         .setStyle(Discord.ButtonStyle.Primary)
                 );
-            interaction.editReply({ embeds: [playEmbed], components: [mesgRow] });
+            song.interaction.editReply({ embeds: [playEmbed], components: [mesgRow] });
             interaction.client.usedPlayCommand = false
         });
         interaction.client.distube.on('addSong', async (queue, song) => {
+            song.interaction = interaction
             if(!interaction.client.usedPlayCommand) return;
             const addEmbed = new Discord.EmbedBuilder()
                 .setTitle(`Added ${song.name} to the queue 🎶`)
@@ -69,8 +71,10 @@ module.exports = {
                 .setImage(song.thumbnail)
                 .setTimestamp()
                 .setFooter({ text: `Requested by: ${song.user.username}` })
-            interaction.editReply({ embeds: [addEmbed] });
+            song.interaction.editReply({ embeds: [addEmbed] });
             interaction.client.usedPlayCommand = false
         });
     },
 };
+// In case I forget, the editing original interaction is due to there being two event listeners
+// TODO: Do the same thing using a single event listener
