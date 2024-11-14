@@ -38,6 +38,7 @@
     "web-streams-polyfill": "^4.0.0"
   },
   "scripts": {
+    "postinstall": "node predeploy.js",
     "start": "node ."
   },
   "keywords": [],
