@@ -10,9 +10,10 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
-RUN node predeploy.js
 
 COPY . .
+
+RUN node predeploy.js
 
 EXPOSE 8000
 
