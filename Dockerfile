@@ -13,8 +13,6 @@ RUN npm install
 
 COPY . .
 
-RUN node predeploy.js
-
 EXPOSE 8000
 
 CMD ["node", "index.js"]
