@@ -19,7 +19,7 @@ module.exports = {
             textChannel: interaction.channel,
             interaction
         })
-        interaction.reply("Added to Queue")
+        interaction.editReply("Added to Queue")
     },
 };
 // In case I forget, the editing original interaction is due to there being two event listeners

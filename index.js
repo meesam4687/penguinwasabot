@@ -15,6 +15,7 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.MessageContent // |> Delete /events/messageDelete.js and /commands/fun/snipe.js if you want to remove these
   ]
 });
+
 const cookies = JSON.parse(process.env.YT_COOKIES)
 client.ytPlugin = new YouTubePlugin({ cookies: cookies })
 client.distube = new DisTube(client, {
@@ -30,7 +31,6 @@ client.distube = new DisTube(client, {
 
 client.commands = new Discord.Collection();
 const cmds = []
-
 const musicCommandsPath = path.join(__dirname, 'commands/music');
 const musicCommandFiles = fs.readdirSync(musicCommandsPath).filter(file => file.endsWith('.js'));
 for (const file of musicCommandFiles) {
