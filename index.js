@@ -15,7 +15,8 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.MessageContent // |> Delete /events/messageDelete.js and /commands/fun/snipe.js if you want to remove these
   ]
 });
-client.ytPlugin = new YouTubePlugin({cookies: JSON.parse(process.env.YT_COOKIES)})
+const cookies = JSON.parse(process.env.YT_COOKIES)
+const ytPlugin = new YouTubePlugin({cookies: cookies})
 client.distube = new DisTube(client, {
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
@@ -23,7 +24,7 @@ client.distube = new DisTube(client, {
   plugins: [
     new SpotifyPlugin(),
     new SoundCloudPlugin(),
-    client.ytPlugin
+    ytPlugin
   ],
 })
 client.commands = new Discord.Collection();
