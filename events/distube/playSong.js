@@ -3,7 +3,7 @@ module.exports = {
     name: 'playSong',
     once: false,
     execute(queue, song) {
-        if(queue.client.usedPlayCommand) return;
+        //if(queue.client.usedPlayCommand) return;
         queue.client.distube.startduration = new Date()
         const playEmbed = new Discord.EmbedBuilder()
             .setTitle(`Now Playing ${song.name} 🎶`)

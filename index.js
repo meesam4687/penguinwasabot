@@ -16,7 +16,7 @@ const client = new Discord.Client({
   ]
 });
 const cookies = JSON.parse(process.env.YT_COOKIES)
-client.ytPlugin = new YouTubePlugin({cookies: cookies})
+client.ytPlugin = new YouTubePlugin({ cookies: cookies })
 client.distube = new DisTube(client, {
   emitNewSongOnly: true,
   emitAddSongWhenCreatingQueue: false,
@@ -92,7 +92,7 @@ for (const file of distubeEventFiles) {
 client.login(process.env.TOKEN)
 
 const express = require("express")()
-express.all('/', function(req, res) {
+express.all('/', function (req, res) {
   res.send("Server Running")
 })
 express.listen(process.env.PORT, console.log("Server Started"))
