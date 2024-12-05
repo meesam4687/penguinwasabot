@@ -96,3 +96,5 @@ express.all('/', function (req, res) {
   res.send("Server Running")
 })
 express.listen(process.env.PORT, console.log("Server Started"))
+
+// TODO: Migrate to Lavalink
