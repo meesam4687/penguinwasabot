@@ -59,11 +59,11 @@ module.exports = {
                 break;
 
             case 'empty':
-                message.editReply('No matches found for your query!');
+                interaction.editReply('No matches found for your query!');
                 break;
 
             case 'error':
-                message.editReply(`Error loading track: ${searchResult.error || 'Unknown error'}`);
+                interaction.editReply(`Error loading track: ${searchResult.error || 'Unknown error'}`);
                 break;
         }
     },
