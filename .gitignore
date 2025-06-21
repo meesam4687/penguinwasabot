@@ -1,6 +1,8 @@
 # Dependencies
 node_modules
 lavalink
+application.yml
+plugins
 # Environment Variables
 .env
 # Others
