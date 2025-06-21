@@ -10,8 +10,9 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         const { channel } = interaction.member.voice;
+        await interaction.deferReply();
         if (!channel) {
-            return message.reply('You need to join a voice channel first!');
+            return interaction.editReply('You need to join a voice channel first!');
         }
 
         const player = interaction.client.moonlinkManager.createPlayer({
@@ -28,14 +29,14 @@ module.exports = {
             requester: interaction.user.id
         });
         if (!searchResult.tracks.length) {
-            return interaction.reply('No results found!');
+            return interaction.editReply('No results found!');
         }
 
         switch (searchResult.loadType) {
             case 'playlist':
                 player.queue.add(searchResult.tracks);
 
-                interaction.reply({
+                interaction.editReply({
                     content: `Added playlist **${searchResult.playlistInfo.name}** with ${searchResult.tracks.length} tracks to the queue.`,
                 });
 
@@ -48,7 +49,7 @@ module.exports = {
             case 'track':
                 player.queue.add(searchResult.tracks[0]);
 
-                interaction.reply({
+                interaction.editReply({
                     content: `Added **${searchResult.tracks[0].title}** to the queue.`,
                 });
 
@@ -58,11 +59,11 @@ module.exports = {
                 break;
 
             case 'empty':
-                message.reply('No matches found for your query!');
+                message.editReply('No matches found for your query!');
                 break;
 
             case 'error':
-                message.reply(`Error loading track: ${searchResult.error || 'Unknown error'}`);
+                message.editReply(`Error loading track: ${searchResult.error || 'Unknown error'}`);
                 break;
         }
     },
