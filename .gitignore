@@ -1,5 +1,6 @@
 # Dependencies
 node_modules
+lavalink
 # Environment Variables
 .env
 # Others
