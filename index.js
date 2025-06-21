@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const path = require('node:path');
 const fs = require('node:fs');
 const { REST } = require("@discordjs/rest")
+const { Manager } = require('moonlink.js');
 require('dotenv').config();
 const client = new Discord.Client({
   intents: [
@@ -10,6 +11,23 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.GuildMessages, // |> Privilleged Intent Required for Snipe.
     Discord.GatewayIntentBits.MessageContent // |> Delete /events/messageDelete.js and /commands/fun/snipe.js if you want to remove these
   ]
+});
+
+client.moonlinkManager = new Manager({
+  nodes: [
+    {
+      host: process.env.LAVAHOST,
+      port: process.env.LAVAPORT,
+      password: process.env.LAVAPASSWORD,
+      secure: false,
+    },
+  ],
+
+  sendPayload: (guildId, payload) => {
+    const guild = client.guilds.cache.get(guildId);
+    if (guild) guild.shard.send(JSON.parse(payload));
+  },
+  autoPlay: true,
 });
 
 client.commands = new Discord.Collection();
@@ -59,6 +77,10 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args));
   }
 }
+
+client.on('raw', (packet) => {
+  client.moonlinkManager.packetUpdate(packet);
+});
 
 client.login(process.env.TOKEN)
 

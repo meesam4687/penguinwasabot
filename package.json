@@ -28,11 +28,14 @@
   "dependencies": {
     "@discordjs/rest": "^2.5.1",
     "better-sqlite3": "^11.10.0",
+    "canvas": "^3.1.1",
     "convert-seconds": "^1.0.1",
     "discord-image-generation": "^1.4.25",
     "discord.js": "^14.20.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "moonlink": "^1.0.0",
+    "moonlink.js": "^4.6.18",
     "oakdex-pokedex": "^0.4.5",
     "quick.db": "^9.1.7",
     "random-reddit": "^2.0.3"
