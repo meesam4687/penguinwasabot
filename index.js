@@ -1,8 +1,4 @@
 const Discord = require('discord.js');
-const { DisTube } = require('distube')
-const { SpotifyPlugin } = require('@distube/spotify')
-const { SoundCloudPlugin } = require('@distube/soundcloud')
-const { YouTubePlugin } = require('@distube/youtube')
 const path = require('node:path');
 const fs = require('node:fs');
 const { REST } = require("@discordjs/rest")
@@ -16,21 +12,9 @@ const client = new Discord.Client({
   ]
 });
 
-const cookies = JSON.parse(process.env.YT_COOKIES)
-client.ytPlugin = new YouTubePlugin({ cookies: cookies })
-client.distube = new DisTube(client, {
-  emitNewSongOnly: true,
-  emitAddSongWhenCreatingQueue: false,
-  emitAddListWhenCreatingQueue: true,
-  plugins: [
-    new SpotifyPlugin(),
-    new SoundCloudPlugin(),
-    client.ytPlugin
-  ],
-})
-
 client.commands = new Discord.Collection();
 const cmds = []
+
 const musicCommandsPath = path.join(__dirname, 'commands/music');
 const musicCommandFiles = fs.readdirSync(musicCommandsPath).filter(file => file.endsWith('.js'));
 for (const file of musicCommandFiles) {
@@ -76,19 +60,6 @@ for (const file of eventFiles) {
   }
 }
 
-const distubeEventsPath = path.join(__dirname, 'events/distube');
-const distubeEventFiles = fs.readdirSync(distubeEventsPath).filter(file => file.endsWith('.js'));
-
-for (const file of distubeEventFiles) {
-  const distubeFilePath = path.join(distubeEventsPath, file);
-  const devent = require(distubeFilePath);
-  if (devent.once) {
-    client.distube.once(devent.name, (...args) => devent.execute(...args));
-  } else {
-    client.distube.on(devent.name, (...args) => devent.execute(...args));
-  }
-}
-
 client.login(process.env.TOKEN)
 
 const express = require("express")()
@@ -96,5 +67,3 @@ express.all('/', function (req, res) {
   res.send("Server Running")
 })
 express.listen(process.env.PORT, console.log("Server Started"))
-
-// TODO: Migrate to Lavalink
