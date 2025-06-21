@@ -1,6 +1,5 @@
-FROM node:18
+FROM node:22
 
-# Install necessary packages
 RUN apt-get update && \
     apt-get install -y ffmpeg openvpn && \
     apt-get clean && \
@@ -8,18 +7,12 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application
 COPY . .
 
-# Copy VPN config file
-COPY vpn.ovpn /etc/openvpn/config.ovpn
 
-# Expose port
 EXPOSE 8000
 
-# Run VPN and then your app
-CMD openvpn --config /etc/openvpn/config.ovpn & node index.js
+CMD node index.js
