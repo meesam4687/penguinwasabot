@@ -5,7 +5,7 @@ module.exports = {
         .setName('stop')
         .setDescription('Stop playing music and clear the queue'),
     async execute(interaction) {
-        const player = interaction.client.moonlinkManager.players.get(message.guild.id);
+        const player = interaction.client.moonlinkManager.players.get(interaction.guild.id);
         if (!player) {
             return interaction.reply('There is nothing playing in this server!');
         }
