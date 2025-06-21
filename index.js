@@ -78,6 +78,19 @@ for (const file of eventFiles) {
   }
 }
 
+const moonlinkEventsPath = path.join(__dirname, 'events/moonlink');
+const moonlinkEventFiles = fs.readdirSync(moonlinkEventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of moonlinkEventFiles) {
+  const moonlinkFilePath = path.join(moonlinkEventsPath, file);
+  const moonlinkEvent = require(moonlinkFilePath);
+  if (moonlinkEvent.once) {
+    client.once(moonlinkEvent.name, (...args) => moonlinkEvent.execute(...args));
+  } else {
+    client.on(moonlinkEvent.name, (...args) => moonlinkEvent.execute(...args));
+  }
+}
+
 client.on('raw', (packet) => {
   client.moonlinkManager.packetUpdate(packet);
 });
