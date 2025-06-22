@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 
 module.exports = {
     data: new Discord.SlashCommandBuilder()
-        .setName('skip')
-        .setDescription('Skip the current song in the queue'),
+        .setName('pause')
+        .setDescription('Pauses the currently playing music'),
     async execute(interaction) {
         const player = interaction.client.moonlinkManager.players.get(interaction.guild.id);
         if (!player) {
@@ -12,12 +12,11 @@ module.exports = {
         if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
             return interaction.reply('You need to be in the same voice channel as the bot to use this command!');
         }
-        if (!player.current) {
-            return interaction.reply('There is nothing playing right now!');
+        if (player.paused) {
+            return interaction.reply('The player is already paused!');
         }
-        const currentTrack = player.current;
-        player.skip();
+        player.pause();
 
-        interaction.reply(`Skipped: **${currentTrack.title}**`);
+        interaction.reply('Paused the player.');
     },
 };

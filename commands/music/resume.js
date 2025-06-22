@@ -2,10 +2,11 @@ const Discord = require('discord.js');
 
 module.exports = {
     data: new Discord.SlashCommandBuilder()
-        .setName('stop')
-        .setDescription('Stop playing music and clear the queue'),
+        .setName('resume')
+        .setDescription('Resume the current song'),
     async execute(interaction) {
         const player = interaction.client.moonlinkManager.players.get(interaction.guild.id);
+
         if (!player) {
             return interaction.reply('There is nothing playing in this server!');
         }
@@ -14,9 +15,12 @@ module.exports = {
             return interaction.reply('You need to be in the same voice channel as the bot to use this command!');
         }
 
-        player.stop();
-        player.queue.clear();
-        player.destroy();
-        interaction.reply('Stopped playback and cleared the queue.');
+        if (!player.paused) {
+            return interaction.reply('The player is not paused!');
+        }
+
+        player.resume();
+
+        interaction.reply('Resumed playback.');
     },
 };
