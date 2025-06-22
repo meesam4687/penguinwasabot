@@ -38,6 +38,7 @@
     "moonlink.js": "^4.6.18",
     "oakdex-pokedex": "^0.4.5",
     "quick.db": "^9.1.7",
-    "random-reddit": "^2.0.3"
+    "random-reddit": "^2.0.3",
+    "string-progressbar": "^1.0.4"
   }
 }
