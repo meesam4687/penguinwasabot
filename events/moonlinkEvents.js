@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-
+const convert = require('convert-seconds');
 module.exports = (client) => {
   client.on('raw', (packet) => {
     client.moonlinkManager.packetUpdate(packet);
@@ -20,7 +20,44 @@ module.exports = (client) => {
   client.moonlinkManager.on('trackStart', (player, track) => {
     const channel = client.channels.cache.get(player.textChannelId);
     if (channel) {
-      channel.send(`Now playing: **${track.title}**`);
+        const requestor = client.users.cache.get(track.requestedBy.id).username || { username: 'Unknown' };
+        const playEmbed = new Discord.EmbedBuilder()
+            .setTitle(`Now Playing ${track.title} 🎶`)
+            .setDescription(`⌚ Song Duration: \`${convert(Math.floor(track.duration/1000)).minutes}:${convert(Math.floor(track.duration/1000)).seconds}\``)
+            .setImage(track.artworkUrl)
+            .setTimestamp()
+            .setFooter({ text: `Requested by: ${requestor}` })
+        const mesgRow = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId("stopbtn")
+                    .setLabel("⏹️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("pausebtn")
+                    .setLabel("⏸️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("skpbtn")
+                    .setLabel("⏩")
+                    .setStyle(Discord.ButtonStyle.Primary)
+            );
+        const mesgRowR = new Discord.ActionRowBuilder()
+            .addComponents(
+                new Discord.ButtonBuilder()
+                    .setCustomId("stopbtn")
+                    .setLabel("⏹️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("pausebtn")
+                    .setLabel("▶️")
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
+                    .setCustomId("skpbtn")
+                    .setLabel("⏩")
+                    .setStyle(Discord.ButtonStyle.Primary)
+            );
+        channel.send({ embeds: [playEmbed], components: [mesgRow] })
     }
   });
 
