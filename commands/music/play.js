@@ -19,7 +19,7 @@ module.exports = {
             guildId: interaction.guild.id,
             voiceChannelId: channel.id,
             textChannelId: interaction.channel.id,
-            autoPlay: true,
+            autoPlay: false,
         });
 
         player.connect();
@@ -47,10 +47,15 @@ module.exports = {
 
             case 'search':
             case 'track':
+                const addEmbed = new Discord.EmbedBuilder()
+                    .setTitle(`🎶 ${searchResult.tracks[0].title} has been added to the queue.`)
+                    .setThumbnail(searchResult.tracks[0].artworkUrl)
+                    .setTimestamp()
+                    .setFooter({ text: 'Added by ' + interaction.user.username });
                 player.queue.add(searchResult.tracks[0]);
 
                 interaction.editReply({
-                    content: `Added **${searchResult.tracks[0].title}** to the queue.`,
+                    embeds: [addEmbed],
                 });
 
                 if (!player.playing) {
