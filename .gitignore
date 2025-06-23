@@ -1,6 +1,6 @@
 # Dependencies
 node_modules
-lavalink
+lavalink/Lavalink.jar
 application.yml
 plugins
 # Environment Variables
