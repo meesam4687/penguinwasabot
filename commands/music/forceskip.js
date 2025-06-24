@@ -25,7 +25,7 @@ module.exports = {
         return interaction.reply("There is nothing playing right now!");
       }
       const currentTrack = player.current;
-      if (player.queue.size === 1) {
+      if (player.queue.size === 0) {
         player.destroy();
         return interaction.reply(`Skipped: **${currentTrack.title}**`);
       } else {
