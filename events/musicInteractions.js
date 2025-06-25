@@ -87,6 +87,9 @@ module.exports = {
       }
       if (player.queue.size === 0) {
         player.destroy();
+        return interaction.reply({
+          content: "Skipped, no more songs in the queue.",
+        });
       } else {
         player.skip();
       }
