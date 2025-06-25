@@ -95,8 +95,8 @@ require("./events/moonlinkEvents")(client);
 
 client.login(process.env.TOKEN);
 
-const express = require("express")();
-express.all("/", function (req, res) {
-  res.send("Server Running");
-});
-express.listen(process.env.PORT, console.log("Server Started"));
+// const express = require("express")();
+// express.all("/", function (req, res) {
+//   res.send("Server Running");
+// });
+// express.listen(process.env.PORT, console.log("Server Started"));
