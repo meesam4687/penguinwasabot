@@ -46,20 +46,6 @@ module.exports = (client) => {
           .setLabel("⏩")
           .setStyle(Discord.ButtonStyle.Primary)
       );
-      const mesgRowR = new Discord.ActionRowBuilder().addComponents(
-        new Discord.ButtonBuilder()
-          .setCustomId("stopbtn")
-          .setLabel("⏹️")
-          .setStyle(Discord.ButtonStyle.Primary),
-        new Discord.ButtonBuilder()
-          .setCustomId("pausebtn")
-          .setLabel("▶️")
-          .setStyle(Discord.ButtonStyle.Primary),
-        new Discord.ButtonBuilder()
-          .setCustomId("skpbtn")
-          .setLabel("⏩")
-          .setStyle(Discord.ButtonStyle.Primary)
-      );
       channel.send({ embeds: [playEmbed], components: [mesgRow] });
     }
   });

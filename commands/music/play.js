@@ -39,7 +39,7 @@ module.exports = {
         player.queue.add(searchResult.tracks);
 
         interaction.editReply({
-          content: `Added playlist **${searchResult.playlistInfo.name}** with ${searchResult.tracks.length} tracks to the queue.`,
+          content: `Added playlist **${searchResult.playlistInfo.name}** to the queue.`,
         });
 
         if (!player.playing) {
