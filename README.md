@@ -18,6 +18,9 @@ Then create a file called ```.env``` and enter the following (replace your_token
 ```env
 TOKEN=your_token
 CLIENT_ID=your_id
+LAVAHOST=127.0.0.1
+LAVAPORT=2333
+LAVAPASSWORD=your_lavalink_password
 ```
 Now run 
 ```sh
