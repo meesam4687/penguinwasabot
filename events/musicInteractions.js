@@ -5,14 +5,20 @@ module.exports = {
   name: "interactionCreate",
   once: false,
   async execute(interaction) {
-    if(!interaction.isButton()) return;
+    if (!interaction.isButton()) return;
     let id = interaction.customId;
     let player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
-
+    if (!player) {
+      return interaction.reply({
+        content: "There is no music playing in this server.",
+        ephemeral: true,
+      });
+    }
     const track = player.current;
-    const requestor = interaction.client.users.cache.get(track.requestedBy.id).username || {
+    const requestor = interaction.client.users.cache.get(track.requestedBy.id)
+      .username || {
       username: "Unknown",
     };
 
@@ -42,12 +48,6 @@ module.exports = {
     );
 
     if (id === "stopbtn") {
-      if (!player) {
-        return interaction.reply({
-          content: "There is no music playing in this server.",
-          ephemeral: true,
-        });
-      }
       player.destroy();
       return interaction.reply({
         content: "Music playback has been stopped.",
@@ -55,12 +55,6 @@ module.exports = {
     }
 
     if (id === "pausebtn") {
-      if (!player) {
-        return interaction.reply({
-          content: "There is no music playing in this server.",
-          ephemeral: true,
-        });
-      }
       if (player.paused) {
         player.resume();
         mesgRow.components[1].setLabel("⏸️");
@@ -79,12 +73,6 @@ module.exports = {
     }
 
     if (id === "skpbtn") {
-      if (!player) {
-        return interaction.reply({
-          content: "There is no music playing in this server.",
-          ephemeral: true,
-        });
-      }
       if (player.queue.size === 0) {
         player.destroy();
         return interaction.reply({
