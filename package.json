@@ -34,11 +34,13 @@
     "discord.js": "^14.20.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "isomorphic-unfetch": "^4.0.2",
     "moonlink": "^1.0.0",
     "moonlink.js": "^4.6.18",
     "oakdex-pokedex": "^0.4.5",
     "quick.db": "^9.1.7",
     "random-reddit": "^2.0.3",
+    "spotify-url-info": "^3.2.18",
     "string-progressbar": "^1.0.4"
   }
 }
