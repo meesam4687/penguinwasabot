@@ -37,8 +37,24 @@ module.exports = {
     if (spotifyTrackRegex.test(query)) {
       try {
         let data = await getData(query);
-        if (data.type === "track") {
-          query = data.name + " " + data.artists[0].name;
+        query = data.name + " " + data.artists[0].name;
+        const searchResult = await interaction.client.moonlinkManager.search({
+          query: query,
+          requester: interaction.user.id,
+        });
+        if (searchResult.tracks.length) {
+          const addEmbed = new Discord.EmbedBuilder()
+            .setTitle(
+              `🎶 ${searchResult.tracks[0].title} has been added to the queue.`
+            )
+            .setThumbnail(searchResult.tracks[0].artworkUrl)
+            .setTimestamp()
+            .setFooter({ text: "Added by " + interaction.user.username });
+          interaction.editReply({ embeds: [addEmbed] });
+          player.queue.add(searchResult.tracks[0]);
+        }
+        if (!player.playing) {
+          player.play();
         }
       } catch (error) {
         return interaction.editReply(
