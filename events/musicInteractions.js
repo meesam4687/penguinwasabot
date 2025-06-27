@@ -7,6 +7,7 @@ module.exports = {
   async execute(interaction) {
     try {
       if (!interaction.isButton()) return;
+      await interaction.deferUpdate();
       let id = interaction.customId;
       let player = interaction.client.moonlinkManager.players.get(
         interaction.guild.id
@@ -50,8 +51,10 @@ module.exports = {
 
       if (id === "stopbtn") {
         player.destroy();
-        return interaction.reply({
+        return interaction.editReply({
           content: "Music playback has been stopped.",
+          embeds: [],
+          components: []
         });
       }
 
@@ -59,14 +62,14 @@ module.exports = {
         if (player.paused) {
           player.resume();
           mesgRow.components[1].setLabel("⏸️");
-          return interaction.update({
+          return interaction.editReply({
             embeds: [playEmbed],
             components: [mesgRow],
           });
         } else {
           player.pause();
           mesgRow.components[1].setLabel("▶️");
-          return interaction.update({
+          return interaction.editReply({
             embeds: [playEmbed],
             components: [mesgRow],
           });
@@ -76,23 +79,21 @@ module.exports = {
       if (id === "skpbtn") {
         if (player.queue.size === 0) {
           player.destroy();
-          return interaction.reply({
+          return interaction.editReply({
             content: "Skipped, no more songs in the queue.",
+            components: [],
+            embeds: []
           });
         } else {
           player.skip();
         }
-        return interaction.update({
+        return interaction.editReply({
           embeds: [playEmbed],
           components: [mesgRow],
         });
       }
     } catch {
       console.error("Error in interactionCreate:", error);
-      return interaction.reply({
-        content: "An error occurred while processing your request.",
-        ephemeral: true,
-      });
     }
   },
 };
