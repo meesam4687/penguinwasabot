@@ -1,0 +1,85 @@
+const filterConfig = require("../../filter_config.json");
+const Discord = require("discord.js");
+let filterState = "off";
+
+module.exports = {
+  data: new Discord.SlashCommandBuilder()
+    .setName("filter")
+    .setDescription("Apply a filter to the player")
+    .addStringOption((option) =>
+      option
+        .setName("filter")
+        .setDescription("Choose a filter to apply")
+        .setRequired(true)
+        .addChoices(
+          { name: "Nightcore", value: "nightcore" },
+          { name: "Vaporwave", value: "vaporwave" },
+          { name: "Bass Boost", value: "bassboost" },
+          { name: "8D Audio", value: "8d" },
+          { name: "Off", value: "off" }
+        )
+    ),
+  async execute(interaction) {
+    const player = interaction.client.moonlinkManager.players.get(
+      interaction.guild.id
+    );
+    let filter = interaction.options.getString("filter");
+    if (!player) {
+      return interaction.reply({
+        content: "Nothing playing in this server.",
+        ephemeral: true,
+      });
+    }
+    if (filter === "off") {
+      if (filterState === "off") {
+        return interaction.reply({
+          content: "Filter is already disabled.",
+          ephemeral: true,
+        });
+      }
+      player.filters.resetFilters();
+      filterState = "off";
+      return interaction.reply({
+        content: "Disabled filter.",
+      });
+    } else if (filterConfig[filter].type === "timescale") {
+      if (filterState !== "off") {
+        player.filters.resetFilters();
+      }
+      player.filters.setTimescale({
+        speed: filterConfig[filter].speed,
+        pitch: filterConfig[filter].pitch,
+        rate: filterConfig[filter].rate,
+      });
+      filterState = "timescale";
+      interaction.reply({
+        content: `Applied **${filter}** to the queue.`,
+      });
+    } else if (filterConfig[filter].type === "equalizer") {
+      if (filterState !== "off") {
+        player.filters.resetFilters();
+      }
+      player.filters.setEqualizer(
+        filterConfig[filter].bands.map((band) => ({
+          band: band.band,
+          gain: band.gain,
+        }))
+      );
+      filterState = "equalizer";
+      interaction.reply({
+        content: `Applied **${filter}** to the queue.`,
+      });
+    } else if (filterConfig[filter].type === "rotation") {
+      if (filterState !== "off") {
+        player.filters.resetFilters();
+      }
+      player.filters.setRotation({
+        rotationHz: filterConfig[filter].rotationHz,
+      });
+      filterState = "rotation";
+      interaction.reply({
+        content: `Applied **${filter}** to the queue.`,
+      });
+    }
+  },
+};

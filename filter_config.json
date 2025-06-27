@@ -1,0 +1,43 @@
+{
+  "vaporwave": {
+    "type": "timescale",
+    "speed": 0.8,
+    "pitch": 0.8,
+    "rate": 1.0
+  },
+  "nightcore": {
+    "type": "timescale",
+    "speed": 1.2,
+    "pitch": 1.2,
+    "rate": 1.0
+  },
+  "bassboost": {
+    "type": "equalizer",
+    "bands": [
+      {
+        "band": 0,
+        "gain": 0.6
+      },
+      {
+        "band": 1,
+        "gain": 0.7
+      },
+      {
+        "band": 2,
+        "gain": 0.8
+      },
+      {
+        "band": 3,
+        "gain": 0.55
+      },
+      {
+        "band": 4,
+        "gain": 0.25
+      }
+    ]
+  },
+  "8d": {
+    "type": "rotation",
+    "frequency": 0.2
+  }
+}
