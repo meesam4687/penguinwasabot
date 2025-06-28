@@ -7,7 +7,7 @@ module.exports = {
   async execute(interaction) {
     try {
       if (!interaction.isButton()) return;
-      await interaction.deferReply();
+      await interaction.deferReply({ephemeral: true});
 
       let id = interaction.customId;
       let player = interaction.client.moonlinkManager.players.get(
@@ -59,8 +59,14 @@ module.exports = {
 
       if (id === "stopbtn") {
         player.destroy();
+        let channel = interaction.guild.channels.cache.get(player.textChannelId);
+        if (channel) {
+          channel.send({
+            content: `${interaction.user} stopped the music.`,
+          });
+        }
         return interaction.editReply({
-          content: `Playback stopped by ${interaction.user}.`,
+          content: `Stopped`,
         });
       }
 
@@ -96,8 +102,14 @@ module.exports = {
         } else {
           player.skip();
         }
+        let channel = interaction.guild.channels.cache.get(player.textChannelId);
+        if (channel) {
+          channel.send({
+            content: `${interaction.user} skipped the song.`,
+          });
+        }
         return interaction.editReply({
-          content: `${interaction.user} skipped the song.`,
+          content: `Skipped`,
         });
       }
     } catch (error) {
