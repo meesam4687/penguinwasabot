@@ -13,7 +13,7 @@ module.exports = {
         interaction.guild.id
       );
       if (!player) {
-        return interaction.reply({
+        return interaction.editReply({
           content: "There is no music playing in this server.",
           ephemeral: true,
         });
@@ -92,7 +92,7 @@ module.exports = {
           components: [mesgRow],
         });
       }
-    } catch {
+    } catch (error) {
       console.error("Error in interactionCreate:", error);
     }
   },
