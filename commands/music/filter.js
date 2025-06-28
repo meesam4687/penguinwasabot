@@ -23,7 +23,6 @@ module.exports = {
     const player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
-    let filterState = interaction.client.filterState;
     let filter = interaction.options.getString("filter");
     if (!player) {
       return interaction.editReply({
@@ -32,19 +31,19 @@ module.exports = {
       });
     }
     if (filter === "off") {
-      if (filterState === "off") {
+      if (interaction.client.filterState === "off") {
         return interaction.editReply({
           content: "Filter is already disabled.",
           ephemeral: true,
         });
       }
       player.filters.resetFilters();
-      filterState = "off";
+      interaction.client.filterState = "off";
       return interaction.editReply({
         content: "Disabled filter.",
       });
     } else if (filterConfig[filter].type === "timescale") {
-      if (filterState !== "off") {
+      if (interaction.client.filterState !== "off") {
         player.filters.resetFilters();
       }
       player.filters.setTimescale({
@@ -52,12 +51,12 @@ module.exports = {
         pitch: filterConfig[filter].pitch,
         rate: filterConfig[filter].rate,
       });
-      filterState = "timescale";
+      interaction.client.filterState = "timescale";
       interaction.editReply({
         content: `Applied **${filter}** to the queue.`,
       });
     } else if (filterConfig[filter].type === "equalizer") {
-      if (filterState !== "off") {
+      if (interaction.client.filterState !== "off") {
         player.filters.resetFilters();
       }
       player.filters.setEqualizer(
@@ -66,18 +65,18 @@ module.exports = {
           gain: band.gain,
         }))
       );
-      filterState = "equalizer";
+      interaction.client.filterState = "equalizer";
       interaction.editReply({
         content: `Applied **${filter}** to the queue.`,
       });
     } else if (filterConfig[filter].type === "rotation") {
-      if (filterState !== "off") {
+      if (interaction.client.filterState !== "off") {
         player.filters.resetFilters();
       }
       player.filters.setRotation({
         rotationHz: filterConfig[filter].rotationHz,
       });
-      filterState = "rotation";
+      interaction.client.filterState = "rotation";
       interaction.editReply({
         content: `Applied **${filter}** to the queue.`,
       });
