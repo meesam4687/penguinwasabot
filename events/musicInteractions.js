@@ -15,7 +15,8 @@ module.exports = {
       if (!player) {
         return interaction.editReply({
           content: "There is no music playing in this server.",
-          ephemeral: true,
+          embeds: [],
+          components: [],
         });
       }
       const track = player.current;
