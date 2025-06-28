@@ -7,23 +7,30 @@ module.exports = {
   async execute(interaction) {
     try {
       if (!interaction.isButton()) return;
-      await interaction.deferUpdate();
+
       let id = interaction.customId;
       let player = interaction.client.moonlinkManager.players.get(
         interaction.guild.id
       );
-      if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
-        return interaction.editReply(
-          "You need to be in the same voice channel as the bot to use this command!"
-        );
-      }
       if (!player) {
-        return interaction.editReply({
+        return interaction.reply({
           content: "There is no music playing in this server.",
-          embeds: [],
-          components: [],
+          ephemeral: true,
         });
       }
+      if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
+        return interaction.reply({
+          content:
+            "You need to be in the same voice channel as the bot to use this command!",
+          ephemeral: true,
+        });
+      }
+      if (id === "stopbtn" || id === "skpbtn") {
+        await interaction.deferReply();
+      } else {
+        await interaction.deferUpdate();
+      }
+
       const track = player.current;
       const requestor = interaction.client.users.cache.get(track.requestedBy.id)
         .username || {
@@ -58,9 +65,7 @@ module.exports = {
       if (id === "stopbtn") {
         player.destroy();
         return interaction.editReply({
-          content: "Music playback has been stopped.",
-          embeds: [],
-          components: [],
+          content: `Playback stopped by ${interaction.user}.`,
         });
       }
 
@@ -85,17 +90,11 @@ module.exports = {
       if (id === "skpbtn") {
         if (player.queue.size === 0) {
           player.destroy();
-          return interaction.editReply({
-            content: "Skipped, no more songs in the queue.",
-            components: [],
-            embeds: [],
-          });
         } else {
           player.skip();
         }
         return interaction.editReply({
-          embeds: [playEmbed],
-          components: [mesgRow],
+          content: `${interaction.user} skipped the song.`,
         });
       }
     } catch (error) {
