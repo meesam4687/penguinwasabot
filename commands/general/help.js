@@ -37,6 +37,7 @@ module.exports = {
     .setName("help")
     .setDescription("Get some help"),
   async execute(interaction) {
+    await interaction.deferReply();
     const p = "/";
     const infoEmbed = new Discord.EmbedBuilder()
       .setColor("#57a3bd")
@@ -51,6 +52,6 @@ module.exports = {
         },
         { name: "━━ 🏓 ・ Fun commands ━━", value: funCommands.join(", ") }
       );
-    interaction.reply({ embeds: [infoEmbed] }).catch(console.error);
+    interaction.editReply({ embeds: [infoEmbed] }).catch(console.error);
   },
 };

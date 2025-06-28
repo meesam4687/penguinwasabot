@@ -5,6 +5,7 @@ module.exports = {
     .setName("forceskip")
     .setDescription("Force skip the current track (you are evil)"),
   async execute(interaction) {
+    await interaction.deferReply();
     if (
       interaction.member.permissions.has(
         Discord.PermissionsBitField.Flags.MANAGE_MESSAGES
@@ -14,26 +15,26 @@ module.exports = {
         interaction.guild.id
       );
       if (!player) {
-        return interaction.reply("There is nothing playing in this server!");
+        return interaction.editReply("There is nothing playing in this server!");
       }
       if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
-        return interaction.reply(
+        return interaction.editReply(
           "You need to be in the same voice channel as the bot to use this command!"
         );
       }
       if (!player.current) {
-        return interaction.reply("There is nothing playing right now!");
+        return interaction.editReply("There is nothing playing right now!");
       }
       const currentTrack = player.current;
       if (player.queue.size === 0) {
         player.destroy();
-        return interaction.reply(`Skipped: **${currentTrack.title}**`);
+        return interaction.editReply(`Skipped: **${currentTrack.title}**`);
       } else {
         player.skip();
-        interaction.reply(`Skipped: **${currentTrack.title}**`);
+        interaction.editReply(`Skipped: **${currentTrack.title}**`);
       }
     } else {
-      interaction.reply("You do not have permission to use this command.");
+      interaction.editReply("You do not have permission to use this command.");
     }
   },
 };

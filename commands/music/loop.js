@@ -15,6 +15,7 @@ module.exports = {
         )
     ),
   async execute(interaction) {
+    await interaction.deferReply();
     const player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
@@ -23,6 +24,6 @@ module.exports = {
       interaction.options.getString("option") === "track"
         ? "enabled"
         : "disabled";
-    interaction.reply({ content: `Loop ${loopStatus}` });
+    interaction.editReply({ content: `Loop ${loopStatus}` });
   },
 };

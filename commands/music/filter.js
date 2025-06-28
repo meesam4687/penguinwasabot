@@ -19,27 +19,28 @@ module.exports = {
         )
     ),
   async execute(interaction) {
+    await interaction.deferReply();
     const player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
-    let filterState = client.filterState;
+    let filterState = interaction.client.filterState;
     let filter = interaction.options.getString("filter");
     if (!player) {
-      return interaction.reply({
+      return interaction.editReply({
         content: "Nothing playing in this server.",
         ephemeral: true,
       });
     }
     if (filter === "off") {
       if (filterState === "off") {
-        return interaction.reply({
+        return interaction.editReply({
           content: "Filter is already disabled.",
           ephemeral: true,
         });
       }
       player.filters.resetFilters();
       filterState = "off";
-      return interaction.reply({
+      return interaction.editReply({
         content: "Disabled filter.",
       });
     } else if (filterConfig[filter].type === "timescale") {
@@ -52,7 +53,7 @@ module.exports = {
         rate: filterConfig[filter].rate,
       });
       filterState = "timescale";
-      interaction.reply({
+      interaction.editReply({
         content: `Applied **${filter}** to the queue.`,
       });
     } else if (filterConfig[filter].type === "equalizer") {
@@ -66,7 +67,7 @@ module.exports = {
         }))
       );
       filterState = "equalizer";
-      interaction.reply({
+      interaction.editReply({
         content: `Applied **${filter}** to the queue.`,
       });
     } else if (filterConfig[filter].type === "rotation") {
@@ -77,7 +78,7 @@ module.exports = {
         rotationHz: filterConfig[filter].rotationHz,
       });
       filterState = "rotation";
-      interaction.reply({
+      interaction.editReply({
         content: `Applied **${filter}** to the queue.`,
       });
     }

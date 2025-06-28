@@ -7,16 +7,17 @@ module.exports = {
     .setName("nowplaying")
     .setDescription("Check the current playing song"),
   async execute(interaction) {
+    await interaction.deferReply();
     const player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
     if (!player || !player.current) {
-      return interaction.reply(
+      return interaction.editReply(
         "There is no song currently playing in this server!"
       );
     }
     if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
-      return interaction.reply(
+      return interaction.editReply(
         "You need to be in the same voice channel as the bot to use this command!"
       );
     }
@@ -42,7 +43,7 @@ module.exports = {
         text: `Requested by ${interaction.user.username}`,
         iconURL: interaction.user.displayAvatarURL(),
       });
-    interaction.reply({
+    interaction.editReply({
       embeds: [npEmbed],
     });
   },

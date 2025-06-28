@@ -10,6 +10,7 @@ module.exports = {
     .setName("meme")
     .setDescription("Get a random meme"),
   async execute(interaction) {
+    await interaction.deferReply();
     let subs = ["memes", "meme", "holup", "shitposting", "dankmemes"];
     let memeObj = await getPost(randomArray(subs));
     let memesEmbed = new Discord.EmbedBuilder()
@@ -20,6 +21,6 @@ module.exports = {
         name: "Requested by " + interaction.user.username.toString(),
         iconURL: interaction.user.displayAvatarURL(),
       });
-    await interaction.reply({ embeds: [memesEmbed] });
+    await interaction.editReply({ embeds: [memesEmbed] });
   },
 };

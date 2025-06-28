@@ -11,6 +11,7 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
+    await interaction.deferReply();
     function ball() {
       const responses = ["Yes", "No", "Maybe", "Probably", "Probably not"];
       return responses[Math.floor(Math.random() * responses.length)];
@@ -21,6 +22,6 @@ module.exports = {
       .setDescription(`The Ball Says \`${ball()}\``)
       .setThumbnail("https://cdn.discordapp.com/emojis/747353630314725376.gif")
       .setTimestamp();
-    interaction.reply({ embeds: [ballEmbed] });
+    interaction.editReply({ embeds: [ballEmbed] });
   },
 };

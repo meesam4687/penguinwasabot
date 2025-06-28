@@ -7,6 +7,7 @@ module.exports = {
     .setName("snipe")
     .setDescription("Fetch the most recently deleted message in this channel"),
   async execute(interaction) {
+    await interaction.deferReply();
     let msg = await db.get(`snipemsg_${interaction.channel.id}`);
     let senderid = await db.get(`snipesender_${interaction.channel.id}`);
     let pfp = await db.get(`snipepfp_${interaction.channel.id}`);
@@ -29,6 +30,6 @@ module.exports = {
         )
       )
       .setFooter({ text: "Sniped, lol" });
-    interaction.reply({ embeds: [embed] });
+    interaction.editReply({ embeds: [embed] });
   },
 };

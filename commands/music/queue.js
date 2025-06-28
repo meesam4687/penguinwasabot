@@ -5,16 +5,17 @@ module.exports = {
     .setName("queue")
     .setDescription("Check the current bot queue"),
   async execute(interaction) {
+    await interaction.deferReply();
     const player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
 
     if (!player) {
-      return interaction.reply("There is nothing playing in this server!");
+      return interaction.editReply("There is nothing playing in this server!");
     }
 
     if (!player.current && player.queue.size === 0) {
-      return interaction.reply("There are no tracks in the queue!");
+      return interaction.editReply("There are no tracks in the queue!");
     }
 
     const formatDuration = (ms) => {
@@ -59,6 +60,6 @@ module.exports = {
       }
     }
 
-    interaction.reply({ embeds: [embed] });
+    interaction.editReply({ embeds: [embed] });
   },
 };

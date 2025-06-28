@@ -5,6 +5,7 @@ module.exports = {
     .setName("coinflip")
     .setDescription("Can't decide on something? Flip a coin!"),
   async execute(interaction) {
+    await interaction.deferReply();
     const cflip = ["Heads", "Tails"];
     function flip() {
       function rareMiddle() {
@@ -18,6 +19,6 @@ module.exports = {
       }
       return value;
     }
-    interaction.reply(flip());
+    interaction.editReply(flip());
   },
 };

@@ -12,13 +12,14 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
+    await interaction.deferReply();
     let pokeInput = interaction.options.getString("pokemonname");
     const pokem = oakdexPokedex.findPokemon(
       pokeInput.toLowerCase().charAt(0).toUpperCase() +
         pokeInput.toLowerCase().slice(1)
     );
     if (pokem === null) {
-      interaction.reply({ content: "Pokemon not Found", ephemeral: true });
+      interaction.editReply({ content: "Pokemon not Found", ephemeral: true });
       return;
     }
     var evo;
@@ -44,6 +45,6 @@ module.exports = {
         )}.gif`
       )
       .setTimestamp();
-    interaction.reply({ embeds: [pokeEmbed] });
+    interaction.editReply({ embeds: [pokeEmbed] });
   },
 };

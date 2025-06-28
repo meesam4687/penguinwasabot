@@ -11,7 +11,8 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
+    await interaction.deferReply();
     const message = interaction.options.getString("msg");
-    interaction.reply(message);
+    interaction.editReply(message);
   },
 };
