@@ -51,11 +51,9 @@ module.exports = (client) => {
   });
 
   client.moonlinkManager.on("queueEnd", (player) => {
-    setTimeout(() => {
-      if (!player.playing && player.queue.size === 0) {
-        client.filterState = "off";
-        player.destroy();
-      }
-    }, 30000);
+    if (!player.playing && player.queue.size === 0) {
+      client.filterState = "off";
+      player.destroy();
+    }
   });
 };
