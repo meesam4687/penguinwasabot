@@ -12,6 +12,11 @@ module.exports = {
       let player = interaction.client.moonlinkManager.players.get(
         interaction.guild.id
       );
+      if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
+        return interaction.editReply(
+          "You need to be in the same voice channel as the bot to use this command!"
+        );
+      }
       if (!player) {
         return interaction.editReply({
           content: "There is no music playing in this server.",
@@ -55,7 +60,7 @@ module.exports = {
         return interaction.editReply({
           content: "Music playback has been stopped.",
           embeds: [],
-          components: []
+          components: [],
         });
       }
 
@@ -83,7 +88,7 @@ module.exports = {
           return interaction.editReply({
             content: "Skipped, no more songs in the queue.",
             components: [],
-            embeds: []
+            embeds: [],
           });
         } else {
           player.skip();
