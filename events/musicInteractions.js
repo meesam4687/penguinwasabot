@@ -7,30 +7,25 @@ module.exports = {
   async execute(interaction) {
     try {
       if (!interaction.isButton()) return;
+      interaction.deferReply();
 
       let id = interaction.customId;
       let player = interaction.client.moonlinkManager.players.get(
         interaction.guild.id
       );
       if (!player) {
-        return interaction.reply({
+        return interaction.editReply({
           content: "There is no music playing in this server.",
           ephemeral: true,
         });
       }
       if (interaction.member.voice.channel?.id !== player.voiceChannelId) {
-        return interaction.reply({
+        return interaction.editReply({
           content:
             "You need to be in the same voice channel as the bot to use this command!",
           ephemeral: true,
         });
       }
-      if (id === "stopbtn" || id === "skpbtn") {
-        await interaction.deferReply();
-      } else {
-        await interaction.deferUpdate();
-      }
-
       const track = player.current;
       const requestor = interaction.client.users.cache.get(track.requestedBy.id)
         .username || {
@@ -73,16 +68,24 @@ module.exports = {
         if (player.paused) {
           player.resume();
           mesgRow.components[1].setLabel("⏸️");
-          return interaction.editReply({
+          interaction.message.edit({
             embeds: [playEmbed],
             components: [mesgRow],
+          });
+          return interaction.editReply({
+            content: `Resumed`,
+            ephemeral: true,
           });
         } else {
           player.pause();
           mesgRow.components[1].setLabel("▶️");
-          return interaction.editReply({
+          interaction.message.edit({
             embeds: [playEmbed],
             components: [mesgRow],
+          });
+          return interaction.editReply({
+            content: `Paused`,
+            ephemeral: true,
           });
         }
       }
