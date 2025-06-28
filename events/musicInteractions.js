@@ -7,7 +7,7 @@ module.exports = {
   async execute(interaction) {
     try {
       if (!interaction.isButton()) return;
-      interaction.deferReply();
+      await interaction.deferReply();
 
       let id = interaction.customId;
       let player = interaction.client.moonlinkManager.players.get(
