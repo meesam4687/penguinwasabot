@@ -1,6 +1,5 @@
 const filterConfig = require("../../filter_config.json");
 const Discord = require("discord.js");
-let filterState = "off";
 
 module.exports = {
   data: new Discord.SlashCommandBuilder()
@@ -23,6 +22,7 @@ module.exports = {
     const player = interaction.client.moonlinkManager.players.get(
       interaction.guild.id
     );
+    let filterState = client.filterState;
     let filter = interaction.options.getString("filter");
     if (!player) {
       return interaction.reply({
