@@ -2,42 +2,41 @@ const Discord = require("discord.js");
 const fs = require("fs");
 const path = require("path");
 
-let musicCommands = [];
-try {
-  musicCommands = fs
-    .readdirSync(path.join(__dirname, "../music/"))
-    .filter((file) => file.endsWith(".js"))
-    .map((file) => `\`/${path.parse(file).name}\``);
-} catch (err) {
-  console.error("Error reading music commands:", err);
-}
-
-let generalCommands = [];
-try {
-  generalCommands = fs
-    .readdirSync(path.join(__dirname, "../general/"))
-    .filter((file) => file.endsWith(".js"))
-    .map((file) => `\`/${path.parse(file).name}\``);
-} catch (err) {
-  console.error("Error reading general commands:", err);
-}
-
-let funCommands = [];
-try {
-  funCommands = fs
-    .readdirSync(path.join(__dirname, "../fun/"))
-    .filter((file) => file.endsWith(".js"))
-    .map((file) => `\`/${path.parse(file).name}\``);
-} catch (err) {
-  console.error("Error reading fun commands:", err);
-}
-
 module.exports = {
   data: new Discord.SlashCommandBuilder()
     .setName("help")
     .setDescription("Get some help"),
   async execute(interaction) {
     await interaction.deferReply();
+    let musicCommands = [];
+    try {
+      musicCommands = fs
+        .readdirSync(path.join(__dirname, "../music/"))
+        .filter((file) => file.endsWith(".js"))
+        .map((file) => `\`/${path.parse(file).name}\``);
+    } catch (err) {
+      console.error("Error reading music commands:", err);
+    }
+
+    let generalCommands = [];
+    try {
+      generalCommands = fs
+        .readdirSync(path.join(__dirname, "../general/"))
+        .filter((file) => file.endsWith(".js"))
+        .map((file) => `\`/${path.parse(file).name}\``);
+    } catch (err) {
+      console.error("Error reading general commands:", err);
+    }
+
+    let funCommands = [];
+    try {
+      funCommands = fs
+        .readdirSync(path.join(__dirname, "../fun/"))
+        .filter((file) => file.endsWith(".js"))
+        .map((file) => `\`/${path.parse(file).name}\``);
+    } catch (err) {
+      console.error("Error reading fun commands:", err);
+    }
     const p = "/";
     const infoEmbed = new Discord.EmbedBuilder()
       .setColor("#57a3bd")
