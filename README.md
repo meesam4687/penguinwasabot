@@ -14,6 +14,8 @@ First run this command
 ```sh
 npm install
 ```
+Make sure [Lavalink](https://lavalink.dev/) is running and configured for `ytsearch:` to work.
+
 Then create a file called ```.env``` and enter the following (replace your_token with your bots token and your_id with your bots id)
 ```env
 TOKEN=your_token
