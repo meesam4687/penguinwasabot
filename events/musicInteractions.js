@@ -6,8 +6,12 @@ module.exports = {
   once: false,
   async execute(interaction) {
     try {
-      if (!interaction.isButton()) return;
-      await interaction.deferReply({ephemeral: true});
+      if (
+        !interaction.isButton() ||
+        !["skpbtn", "pausebtn", "stopbtn"].includes(interaction.customId)
+      )
+        return;
+      await interaction.deferReply({ ephemeral: true });
 
       let id = interaction.customId;
       let player = interaction.client.moonlinkManager.players.get(
@@ -59,7 +63,9 @@ module.exports = {
 
       if (id === "stopbtn") {
         player.destroy();
-        let channel = interaction.guild.channels.cache.get(player.textChannelId);
+        let channel = interaction.guild.channels.cache.get(
+          player.textChannelId
+        );
         if (channel) {
           channel.send({
             content: `${interaction.user} stopped the music.`,
@@ -95,22 +101,100 @@ module.exports = {
           });
         }
       }
-
+      let channel = interaction.guild.channels.cache.get(player.textChannelId);
+      let imsg;
       if (id === "skpbtn") {
-        if (player.queue.size === 0) {
-          player.destroy();
-        } else {
-          player.skip();
-        }
-        let channel = interaction.guild.channels.cache.get(player.textChannelId);
-        if (channel) {
-          channel.send({
-            content: `${interaction.user} skipped the song.`,
+        let vc = interaction.member.voice.channel;
+        let votes = 0;
+        if (
+          vc.members.size <= 2 ||
+          interaction.member.id === player.current.requestedBy.id
+        ) {
+          const currentTrack = player.current;
+          if (player.queue.size === 0) {
+            player.destroy();
+            interaction.editReply(`Skipped`);
+            let channel = interaction.guild.channels.cache.get(
+              player.textChannelId
+            );
+            if (channel) {
+              channel.send({
+                content: `${interaction.user} skipped **${currentTrack.title}**.`,
+              });
+            }
+          } else {
+            player.skip();
+            interaction.editReply(`Skipped`);
+            if (channel) {
+              channel.send({
+                content: `${interaction.user} skipped **${currentTrack.title}**.`,
+              });
+            }
+          }
+        } else if (vc.members.size > 2) {
+          let skipEmbed = new Discord.EmbedBuilder()
+            .setColor("#0099ff")
+            .setTitle("⏭️ Skip the Song?")
+            .setDescription(`${votes}/${Math.ceil(vc.members.size / 2)} Votes`)
+            .setTimestamp();
+          let row = new Discord.ActionRowBuilder().addComponents(
+            new Discord.ButtonBuilder()
+              .setCustomId("voteskip")
+              .setLabel("Skip")
+              .setStyle(Discord.ButtonStyle.Primary)
+          );
+
+          await interaction.editReply({
+            content: `Started voteskip.`,
+          });
+          if (channel) {
+            channel.send({
+              embeds: [skipEmbed],
+              components: [row],
+            }).then((msg) => {
+              imsg = msg;
+            });
+          }
+          const collector = interaction.channel.createMessageComponentCollector(
+            {
+              componentType: Discord.ComponentType.Button,
+              time: 15_000,
+            }
+          );
+          collector.on("collect", (i) => {
+            if (i.customId === "voteskip") {
+              votes++;
+              skipEmbed.setDescription(
+                `${votes}/${Math.ceil(vc.members.size / 2)} Votes`
+              );
+              i.update({ embeds: [skipEmbed] });
+              if (votes >= Math.ceil(vc.members.size / 2)) {
+                if (player.queue.size === 0) {
+                  player.destroy();
+                } else {
+                  player.skip();
+                }
+                collector.stop();
+              }
+            }
+          });
+
+          collector.on("end", () => {
+            row.components[0].setDisabled(true);
+            let channel = interaction.guild.channels.cache.get(
+              player.textChannelId
+            );
+            imsg.edit({
+              embeds: [skipEmbed],
+              components: [row],
+            });
+            if (votes < Math.ceil(vc.members.size / 2)) {
+              interaction.followUp("Not enough votes to skip the song.");
+            } else {
+              interaction.followUp(`Skipped: **${player.current.title}**`);
+            }
           });
         }
-        return interaction.editReply({
-          content: `Skipped`,
-        });
       }
     } catch (error) {
       console.error("Error in interactionCreate:", error);
