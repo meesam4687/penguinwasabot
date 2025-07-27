@@ -28,6 +28,7 @@ client.moonlinkManager = new Manager({
     if (guild) guild.shard.send(JSON.parse(payload));
   },
   autoPlay: true,
+  disableNativeSource: true
 });
 
 client.commands = new Discord.Collection();
