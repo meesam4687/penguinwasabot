@@ -36,7 +36,7 @@
     "express": "^5.1.0",
     "isomorphic-unfetch": "^4.0.2",
     "moonlink": "^1.0.0",
-    "moonlink.js": "^4.6.18",
+    "moonlink.js": "^4.52.2",
     "oakdex-pokedex": "^0.4.5",
     "quick.db": "^9.1.7",
     "random-reddit": "^2.0.3",
